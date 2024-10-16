@@ -65,9 +65,8 @@ public class LogServiceImpl implements LogService{
     public void updateUserAgent(Long id, String userAgent) {
         Log log = logRepository.read(id);
         if (log != null) {
-            Log updatedLog = new Log(id, log.getMessage(), userAgent, log.getLevel());
-            updatedLog.setTimestamp(log.getTimestamp());
-            logRepository.update(updatedLog);
+            log.setUserAgent(userAgent);
+            logRepository.update(log);
         }
     }
 }

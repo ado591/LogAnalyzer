@@ -6,7 +6,6 @@ import ru.angela.NauJava.entities.Level;
 import ru.angela.NauJava.entities.Log;
 import ru.angela.NauJava.services.LogService;
 
-import java.time.ZonedDateTime;
 import java.time.format.DateTimeParseException;
 import java.util.List;
 import java.util.Scanner;
@@ -32,7 +31,12 @@ public class CommandProcessor {
                 String data = scanner.nextLine();
                 try {
                     Log newLog = parseLog(data);
-                    logService.addLog(newLog);
+                    if (logService.findById(newLog.getId()) == null) {
+                        logService.addLog(newLog);
+                    } else {
+                        System.out.println("Лог с таким id уже существует");
+                    }
+
                 } catch (IllegalArgumentException e) {
                     System.out.println(e.getMessage());
                 }
@@ -43,6 +47,9 @@ public class CommandProcessor {
                 Log log;
                 try {
                     Long id = Long.parseLong(scanner.nextLine());
+                    if (id < 0) {
+                        throw new IllegalArgumentException();
+                    }
                     log = logService.findById(id);
                 } catch (IllegalArgumentException e) {
                     System.out.println("Неверный формат id");
